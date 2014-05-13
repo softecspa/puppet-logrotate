@@ -1,0 +1,4 @@
+puppet-logrotate
+================
+
+manage logrotate
