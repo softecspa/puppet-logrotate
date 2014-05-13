@@ -1,0 +1,33 @@
+# File managed by puppet
+<%= log %> {
+<% options.each do |opt| -%>
+	<%= opt %>
+<% end -%>
+<% if interval -%>
+	<%= interval %>
+<% end -%>
+<% if rotation -%>
+	rotate <%= rotation %>
+<% end -%>
+<% if size -%>
+	size <%= size %>
+<% end -%>
+<% if minsize -%>
+	minsize <%= minsize %>
+<% end -%>
+<% if create -%>
+	create <%= create %>
+<% end -%>
+<% if archive -%>
+	olddir <%= olddir %>
+<% end -%>
+<% if scripts -%><%= scripts %>
+<% end -%>
+
+<% if postrotate -%>
+	postrotate
+		<%= postrotate %> 
+	endscript
+<% end -%>
+
+}
