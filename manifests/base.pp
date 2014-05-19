@@ -1,4 +1,5 @@
 class logrotate::base {
+
 	include logrotate::params
 
 	package { 'logrotate':
@@ -32,35 +33,40 @@ class logrotate::base {
 		# notify	=> Service["${logrotate::params::cron_service_name}"],
 	}
 
+  $require = $logrotate::olddir_group?{
+    'adm'   => Package['logrotate'],
+    'root'  => Package['logrotate'],
+    default => [ Package['logrotate'], Group[$logrotate::olddir_group] ]
+  }
+
 	file { "${logrotate::params::logrotate_archive_dir}":
 		ensure	=> directory,
-		owner	=> 'root',
-		group	=> 'super',
-		mode	=> '2755',
-		require	=> [ Package['logrotate'], Group["super"] ],
+		owner	  => $logrotate::olddir_owner,
+		group	  => $logrotate::olddir_group,
+		mode	  => $logrotate::olddir_mode,
+		require	=> $require
 	}
 
+  $require_subdir = $logrotate::olddir_group?{
+    'adm'   => File[$logrotate::params::logrotate_archive_dir],
+    'root'  => File[$logrotate::params::logrotate_archive_dir],
+    default => [ File[$logrotate::params::logrotate_archive_dir], Group[$logrotate::olddir_group] ]
+  }
 
 	file { "${logrotate::params::logrotate_archive_dir}/wtmp":
 		ensure	=> directory,
-		owner	=> 'root',
-		group	=> 'super',
-		mode	=> '2755',
-		require	=> [
-                File["${logrotate::params::logrotate_archive_dir}"],
-                Group["super"]
-              ],
+		owner	  => $logrotate::olddir_owner,
+		group	  => $logrotate::olddir_group,
+		mode	  => $logrotate::olddir_mode,
+		require	=> $require_subdir
 	}
 
 	file { "${logrotate::params::logrotate_archive_dir}/btmp":
 		ensure	=> directory,
-		owner	=> 'root',
-		group	=> 'super',
-		mode	=> '2755',
-		require	=> [
-                File["${logrotate::params::logrotate_archive_dir}"],
-                Group["super"],
-              ],
+    owner   => $logrotate::olddir_owner,
+    group   => $logrotate::olddir_group,
+    mode    => $logrotate::olddir_mode,
+		require	=> $require_subdir
 	}
 
 	if $operatingsystem == "CentOS" {

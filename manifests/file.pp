@@ -7,9 +7,9 @@ define logrotate::file (
 	$options=false,
 	$archive=false,
 	$olddir="${logrotate::params::logrotate_archive_dir}/$name",
-	$olddir_owner='root',
-	$olddir_group='root',
-	$olddir_mode='700',
+	$olddir_owner,
+	$olddir_group,
+	$olddir_mode,
 	$create=false,
 	$scripts=false,
 	$postrotate=false
@@ -18,7 +18,7 @@ define logrotate::file (
 
 	if !defined(File[$olddir]) {
     file { "$olddir":
-      ensure	=> 'directory',
+      ensure	=> directory,
       owner	  => $olddir_owner,
       group	  => $olddir_group,
       mode	  => $olddir_mode,
