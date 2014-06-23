@@ -14,7 +14,7 @@ define logrotate::file (
 	$scripts=false,
 	$postrotate=false
 ) {
-	include logrotate::base
+	include logrotate
 
 	if !defined(File[$olddir]) {
     file { "$olddir":
